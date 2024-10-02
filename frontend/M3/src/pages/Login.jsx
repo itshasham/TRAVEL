@@ -12,9 +12,10 @@ const Login = () => {
 
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { storeTokenInLS } = useAuth(); // Use the storeTokenInLS function from the Auth context
   
-  
+  // Extract storeTokenInLS and d1 from useAuth at the top level
+  const { storeTokenInLS, d1 } = useAuth(); 
+
   const handleInput = (e) => {
     const { name, value } = e.target;
     setUser({
@@ -32,10 +33,8 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        withCredentials: true,
         body: JSON.stringify(user1),
       });
-     
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -44,17 +43,19 @@ const Login = () => {
 
       const data = await response.json();
       
-      // Check if user is an admin
-      const {user}=useAuth();
-      
       // Save token to local storage and context state
       storeTokenInLS(data.token);
-      console.log("Login Successfully")
+      
+      console.log("Login Successfully");
       alert('Login successful');
-      console.log(user.admin);
-      
-      
-      
+
+      // Check if the user is an admin and navigate accordingly
+      if (data && d1[0]) { // d1[0] corresponds to admin status
+        navigate("/Admin"); // Navigate to admin page if true
+      } else {
+        navigate("/"); // Navigate to home page otherwise
+      }
+
     } catch (error) {
       console.error('Fetch error:', error);
       setError('Login failed. Please try again.');

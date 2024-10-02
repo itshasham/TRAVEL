@@ -6,6 +6,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(null);
   const [services, setServices] = useState([]);
+  const [d1, setData1] = useState(null);
 
   const userAuthentication = async () => {
     if (!token) return;
@@ -20,7 +21,12 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setUser(data.userData);
+        setUser(data.msg);
+
+        // Set user data to array
+        let arr = [data.msg.admin, data.msg._id, data.msg.phoneno, data.msg.username, data.msg.email];
+        setData1(arr);
+
       } else {
         console.error("Error fetching user data");
         setUser(null);
@@ -68,12 +74,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Run user authentication when the token changes
   useEffect(() => {
     userAuthentication();
   }, [token]);
 
+  // Log updated d1 after it's set
+  useEffect(() => {
+    if (d1) {
+      console.log("Updated d1:", d1);  // This will log after d1 is updated
+    }
+  }, [d1]);
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn: !!token, storeTokenInLS, LogoutUser, user, getServices, services }}>
+    <AuthContext.Provider value={{ isLoggedIn: !!token, storeTokenInLS, LogoutUser, d1, getServices, services }}>
       {children}
     </AuthContext.Provider>
   );

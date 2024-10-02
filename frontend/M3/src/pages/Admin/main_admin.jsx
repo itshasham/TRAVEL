@@ -1,6 +1,6 @@
 import React from 'react';
-import './Admin_css/main_admin.css'
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import './Admin_css/main_admin.css'; // Import your CSS file for styling
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -12,33 +12,31 @@ const AdminPage = () => {
 
   return (
     <div className="admin-container">
-      <div className="header">
-        <h1>Admin Dashboard</h1>
-        <button className="logout-btn" onClick={handleLogout}>
-          Logout
-        </button>
+      <div className="sidebar">
+        <h1 className="sidebar-title">Admin Dashboard</h1>
+        <ul className="sidebar-menu">
+          <li>
+            <NavLink to="/add-trip" className="sidebar-item">Add New Trip</NavLink>
+          </li>
+          <li>
+            <NavLink to="/update-trip" className="sidebar-item">Update Trip</NavLink>
+          </li>
+          <li>
+            <NavLink to="/delete-trip" className="sidebar-item">Delete Trip</NavLink>
+          </li>
+          <li>
+            <NavLink to="/manage-accessories" className="sidebar-item">Manage Accessories</NavLink>
+          </li>
+          <li>
+            <NavLink to="/weather-report" className="sidebar-item">Weather Report</NavLink>
+          </li>
+        </ul>
+        
       </div>
-      <div className="admin-options">
-        <div className="option" onClick={() => navigate('/add-trip')}>
-          <img src="/images/add_trip.jpg" alt="Add New Trip" />
-          <p>Add New Trip</p>
-        </div>
-        <div className="option" onClick={() => navigate('/update-trip')}>
-          <img src="/images/update_trip.jpg" alt="Update Trip" />
-          <p>Update Trip</p>
-        </div>
-        <div className="option" onClick={() => navigate('/delete-trip')}>
-          <img src="/images/delete_trip.jpg" alt="Delete Trip" />
-          <p>Delete Trip</p>
-        </div>
-        <div className="option" onClick={() => navigate('/weather-report')}>
-          <img src="/images/weather_report.jpg" alt="Weather Report" />
-          <p>Weather Report</p>
-        </div>
-        <div className="option" onClick={() => navigate('/manage-accessories')}>
-          <img src="/images/accessories.jpg" alt="Manage Accessories" />
-          <p>Manage Accessories</p>
-        </div>
+
+      <div className="main-content">
+        <h2>Welcome to the Admin Dashboard</h2>
+        {/* Additional content can go here */}
       </div>
     </div>
   );

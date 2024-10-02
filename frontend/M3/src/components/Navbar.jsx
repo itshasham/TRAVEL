@@ -5,7 +5,7 @@ import logo from '../assets/images/p1.png';
 import { useAuth } from "../store/token";
 
 const Navbar = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, d1 } = useAuth(); // Destructure d1 from useAuth
 
   return (
     <header className="navbar-header">
@@ -25,19 +25,22 @@ const Navbar = () => {
               <NavLink to="/about"> About </NavLink>
             </li>
             <li>
-              <NavLink to="/pay"> Pay </NavLink>
-            </li>
-            <li>
               <NavLink to="/services"> Services </NavLink>
             </li>
-            {isLoggedIn ? (
+            {isLoggedIn ? ( // Check if the user is logged in
               <>
+                
                 <li>
                   <NavLink to="/logout"> Logout </NavLink>
                 </li>
                 <li>
                   <NavLink to="/contactus"> Contact </NavLink>
                 </li>
+                {d1[0] && ( // Check if d[0] is true for admin access
+                  <li>
+                    <NavLink to="/admin"> Admin </NavLink>
+                  </li>
+                )}
               </>
             ) : (
               <>

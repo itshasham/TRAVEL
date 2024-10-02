@@ -8,21 +8,26 @@ import Navbar from "./components/Navbar";
 import About from './pages/About';
 import Logout from './pages/Logout';
 import Services from './pages/Services';
-import Pay from './pages/pay'
+import AdminPage from "./pages/Admin/main_admin";
 const App = () => {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/pay " element={<Pay />} />
+       
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/services" element={<Services />} />
         <Route path="/register" element={<Register />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/Admin" element={<AdminPage/>}/>
       </Routes>
+      
+
+
+      
     </BrowserRouter>
   );
 }
