@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [services, setServices] = useState([]);
 
-  // Function to authenticate the user and fetch user data
   const userAuthentication = async () => {
     if (!token) return;
 
@@ -21,45 +20,32 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched user data: ", data.msg);
-        setUser(data.msg);
-
+        setUser(data.userData);
       } else {
         console.error("Error fetching user data");
-        handleLogout();  // Clear data on failed authentication
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("token");
       }
     } catch (error) {
-      console.error("Authentication error:", error);
-      handleLogout();  // Clear data on error
+      console.error(error);
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem("token");
     }
   };
 
-  // Effect to trigger user authentication when token changes
-  useEffect(() => {
-    userAuthentication();
-  }, [token]);
-
-  // Effect to log user state when it updates
-  useEffect(() => {
-    if (user) {
-      console.log("User state updated: ", user);  // Now you can access user.admin, user.email, etc.
-    }
-  }, [user]);
-
-  // Function to store token in local storage
   const storeTokenInLS = (serverToken) => {
     setToken(serverToken);
     localStorage.setItem("token", serverToken);
   };
 
-  // Logout function to clear token and user data
-  const handleLogout = () => {
+  const LogoutUser = () => {
     setToken(null);
     setUser(null);
     localStorage.removeItem("token");
   };
 
-  // Function to fetch services
   const getServices = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/Provider/Service", {
@@ -82,16 +68,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    userAuthentication();
+  }, [token]);
+
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn: !!token, storeTokenInLS, handleLogout, user, getServices, services }}
-    >
+    <AuthContext.Provider value={{ isLoggedIn: !!token, storeTokenInLS, LogoutUser, user, getServices, services }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Hook to use authentication context
 export const useAuth = () => {
   const authContextValue = useContext(AuthContext);
   if (!authContextValue) {
